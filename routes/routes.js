@@ -14,12 +14,28 @@ router.get('/estudiantes', (req, res) => {
     });
   });
 
+router.get('/estudiante/:id', (req, res) => {
+    const { id } = req.params; 
+    mysqlConnection.query('SELECT * FROM actores WHERE id = ?', 
+    [id], (err, rows, fields) => {
+      if (!err) {
+        res.json(rows[0]);
+      } else {
+        console.log(err);
+      }
+    });
+  });  
+
 router.post('/nuevo-estudiante',(req,res)=>{
 
-const {nombres,apellidos,correo,documento,telefono_celular,fecha_nacimiento,institucion_id} = req.body;
-let alumno = [nombres,apellidos,correo,documento,telefono_celular,fecha_nacimiento,institucion_id];
+const {nombres,apellidos,correo,documento,telefono_celular,fecha_nacimiento,
+        institucion_id} = req.body;
 
-let nuevoAlumno = `INSERT INTO actores(nombres,apellidos,correo,documento,telefono_celular,fecha_nacimiento,institucion_id)
+let alumno = [nombres,apellidos,correo,documento,telefono_celular,
+  fecha_nacimiento,institucion_id];
+
+let nuevoAlumno = `INSERT INTO actores(nombres,apellidos,correo,documento,
+  telefono_celular,fecha_nacimiento,institucion_id)
                   VALUES(?,?,?,?,?,?,?)`;
 mysqlConnection.query(nuevoAlumno, alumno, (err, results, fields) => {
   if (err) {
